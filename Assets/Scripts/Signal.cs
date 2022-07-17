@@ -6,19 +6,43 @@ public class Signal : MonoBehaviour
 {
     [SerializeField] private AudioSource _signal;
 
-    public static bool IsSignal { get; private set; }
+    private float _maxVolume = 1;
+    private float _minVolume = 0;
+    private float _volumeChangePerFrame = 0.0005f;
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void Start()
     {
-        if (collision.TryGetComponent<Player>(out Player player))
+        StartCoroutine(VolumeChange());
+    }
+
+    private IEnumerator VolumeChange()
+    {
+        if (House.IsSignal == true)
         {
             _signal.Play();
-            IsSignal = true;
+        }
+
+        while (true)
+        {
+            if (House.IsSignal == true)
+            {
+                TurnUpVolume(_signal);
+            }
+            else
+            {
+                TurnDownVolume(_signal);
+            }
+            yield return null;
         }
     }
 
-    public void OnTriggerExit2D(Collider2D collision)
+    private void TurnUpVolume(AudioSource audioSource)
     {
-        IsSignal = false;
+        audioSource.volume = Mathf.MoveTowards(_signal.volume, _maxVolume, _volumeChangePerFrame);
+    }
+
+    private void TurnDownVolume(AudioSource audioSource)
+    {
+        audioSource.volume = Mathf.MoveTowards(_signal.volume, _minVolume, _volumeChangePerFrame);
     }
 }
