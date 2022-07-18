@@ -6,43 +6,39 @@ public class Signal : MonoBehaviour
 {
     [SerializeField] private AudioSource _signal;
 
-    private float _maxVolume = 1;
-    private float _minVolume = 0;
+    private float _target;
     private float _volumeChangePerFrame = 0.0005f;
 
     public void Start()
     {
-        StartCoroutine(VolumeChange());
+        StartCoroutine(VolumeChanger());
     }
 
-    private IEnumerator VolumeChange()
+    private IEnumerator VolumeChanger()
     {
-        if (House.IsSignal == true)
-        {
-            _signal.Play();
-        }
-
         while (true)
         {
             if (House.IsSignal == true)
             {
-                TurnUpVolume(_signal);
+                TurnUpVolume();
             }
             else
             {
-                TurnDownVolume(_signal);
+                TurnDownVolume();
             }
             yield return null;
         }
     }
 
-    private void TurnUpVolume(AudioSource audioSource)
+    private void TurnUpVolume()
     {
-        audioSource.volume = Mathf.MoveTowards(_signal.volume, _maxVolume, _volumeChangePerFrame);
+        _target = 1;
+        _signal.volume = Mathf.MoveTowards(_signal.volume, _target, _volumeChangePerFrame);
     }
 
-    private void TurnDownVolume(AudioSource audioSource)
+    private void TurnDownVolume()
     {
-        audioSource.volume = Mathf.MoveTowards(_signal.volume, _minVolume, _volumeChangePerFrame);
+        _target = 0;
+        _signal.volume = Mathf.MoveTowards(_signal.volume, _target, _volumeChangePerFrame);
     }
 }
