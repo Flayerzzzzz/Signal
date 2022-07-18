@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class House : MonoBehaviour
 {
-    [SerializeField] private UnityEvent _unityEvent;
+    [SerializeField] private UnityEvent _signalStarting;
 
     public static bool IsSignal { get; private set; }
 
@@ -14,7 +14,7 @@ public class House : MonoBehaviour
         if (collision.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
             IsSignal = true;
-            _unityEvent.Invoke();
+            _signalStarting.Invoke();
         }
     }
 
