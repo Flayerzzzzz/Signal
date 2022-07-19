@@ -19,7 +19,7 @@ public class Signal : MonoBehaviour
     {
         while (true)
         {
-            if (House.IsSignal == true)
+            if (House.IsInside == true)
             {
                 ChangeVolume(_maxVolume);
             }
@@ -29,6 +29,7 @@ public class Signal : MonoBehaviour
             }
             yield return null;
         }
+
     }
 
     private void ChangeVolume(float target)

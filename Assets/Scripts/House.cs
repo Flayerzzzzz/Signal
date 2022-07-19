@@ -5,16 +5,13 @@ using UnityEngine.Events;
 
 public class House : MonoBehaviour
 {
-    [SerializeField] private UnityEvent _signalStarting;
-
-    public static bool IsSignal { get; private set; }
+    public static bool IsInside { get; private set; }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
-            IsSignal = true;
-            _signalStarting.Invoke();
+            IsInside = true;
         }
     }
 
@@ -22,7 +19,7 @@ public class House : MonoBehaviour
     {
         if (collision.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
-            IsSignal = false;
+            IsInside = false;
         }
     }
 }
