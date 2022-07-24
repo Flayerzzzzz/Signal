@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 public class House : MonoBehaviour
 {
-
     public event UnityAction<bool> _playerEntered;
 
     public void OnTriggerEnter2D(Collider2D collision)

@@ -7,6 +7,8 @@ public class Signal : MonoBehaviour
     [SerializeField] private AudioSource _signal;
     [SerializeField] private House _house;
 
+    private float _maxVolume = 1f;
+    private float _minVolume = 0f;
     private float _volumeChangePerFrame = 0.0005f;
 
     private void OnEnable()
@@ -24,33 +26,16 @@ public class Signal : MonoBehaviour
         StopAllCoroutines();
 
         if (isInside == true)
-        {
-            StartCoroutine(IncreaseVolume());
-        }
+            StartCoroutine(ChangeVolume(_maxVolume));
         else
-        {
-            StartCoroutine(DecreaseVolume());
-        }
+            StartCoroutine(ChangeVolume(_minVolume));
     }
 
-    private IEnumerator IncreaseVolume()
+    private IEnumerator ChangeVolume(float target)
     {
-        float maxVolume = 1f;
-
-        while (_signal.volume < maxVolume)
+        while (_signal.volume != target)
         {
-            _signal.volume = Mathf.MoveTowards(_signal.volume, maxVolume, _volumeChangePerFrame);
-            yield return null;
-        }
-    }
-
-    private IEnumerator DecreaseVolume()
-    {
-        float minVolume = 0f;
-
-        while (_signal.volume > minVolume)
-        {
-            _signal.volume = Mathf.MoveTowards(_signal.volume, minVolume, _volumeChangePerFrame);
+            _signal.volume = Mathf.MoveTowards(_signal.volume, target, _volumeChangePerFrame);
             yield return null;
         }
     }
