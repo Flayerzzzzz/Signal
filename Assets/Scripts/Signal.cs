@@ -25,7 +25,7 @@ public class Signal : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (isInside == true)
+        if (isInside)
             StartCoroutine(ChangeVolume(_maxVolume));
         else
             StartCoroutine(ChangeVolume(_minVolume));
