@@ -5,35 +5,53 @@ using UnityEngine;
 public class Signal : MonoBehaviour
 {
     [SerializeField] private AudioSource _signal;
+    [SerializeField] private House _house;
 
-    private float _maxVolume = 1f;
-    private float _minVolume = 0f;
     private float _volumeChangePerFrame = 0.0005f;
 
-    public void Start()
+    private void OnEnable()
     {
-        StartCoroutine(VolumeChanger());
+        _house._playerEntered += VolumeChanger;
     }
 
-    private IEnumerator VolumeChanger()
+    private void OnDisable()
     {
-        while (true)
+        _house._playerEntered -= VolumeChanger;
+    }
+
+    private void VolumeChanger(bool isInside)
+    {
+        StopAllCoroutines();
+
+        if (isInside == true)
         {
-            if (House.IsInside == true)
-            {
-                ChangeVolume(_maxVolume);
-            }
-            else
-            {
-                ChangeVolume(_minVolume);
-            }
+            StartCoroutine(IncreaseVolume());
+        }
+        else
+        {
+            StartCoroutine(DecreaseVolume());
+        }
+    }
+
+    private IEnumerator IncreaseVolume()
+    {
+        float maxVolume = 1f;
+
+        while (_signal.volume < maxVolume)
+        {
+            _signal.volume = Mathf.MoveTowards(_signal.volume, maxVolume, _volumeChangePerFrame);
             yield return null;
         }
-
     }
 
-    private void ChangeVolume(float target)
+    private IEnumerator DecreaseVolume()
     {
-        _signal.volume = Mathf.MoveTowards(_signal.volume, target, _volumeChangePerFrame);
+        float minVolume = 0f;
+
+        while (_signal.volume > minVolume)
+        {
+            _signal.volume = Mathf.MoveTowards(_signal.volume, minVolume, _volumeChangePerFrame);
+            yield return null;
+        }
     }
 }

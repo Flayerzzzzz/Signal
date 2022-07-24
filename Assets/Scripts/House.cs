@@ -5,13 +5,14 @@ using UnityEngine.Events;
 
 public class House : MonoBehaviour
 {
-    public static bool IsInside { get; private set; }
+
+    public event UnityAction<bool> _playerEntered;
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
-            IsInside = true;
+            _playerEntered?.Invoke(true);
         }
     }
 
@@ -19,7 +20,7 @@ public class House : MonoBehaviour
     {
         if (collision.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
-            IsInside = false;
+            _playerEntered?.Invoke(false);
         }
     }
 }
